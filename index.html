@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Motion Studio by Razka (Free Edition)</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { oled: '#05070a', card: '#0e121b', borderDark: '#1e2638' },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['Fira Code', 'monospace'] }
+                }
+            }
+        }
+    </script>
+
+    <!-- MP4 Muxer for WebCodecs MP4 generation -->
+    <script src="https://unpkg.com/mp4-muxer/build/mp4-muxer.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        body { background-color: #05070a; color: #f1f5f9; font-family: 'Inter', sans-serif; height: 100dvh; width: 100vw; overflow: hidden; margin: 0; }
+        .mono { font-family: 'Fira Code', monospace; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #080b11; }
+        ::-webkit-scrollbar-thumb { background: #26334d; border-radius: 999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #10b981; }
+        .checkerboard-bg {
+            background-color: #0b0f17;
+            background-image: linear-gradient(45deg, #131926 25%, transparent 25%), linear-gradient(-45deg, #131926 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #131926 75%), linear-gradient(-45deg, transparent 75%, #131926 75%);
+            background-size: 24px 24px; background-position: 0 0, 0 12px, 12px -12px, -12px 0px;
+        }
+        .tab-pane { display: none; flex-direction: column; height: 100%; width: 100%; }
+        .tab-pane.active { display: flex; }
+        @media (min-width: 768px) {
+            #pane-preview { display: flex !important; }
+            #pane-code, #pane-prompt, #pane-settings { display: none; }
+            #pane-code.active, #pane-prompt.active, #pane-settings.active { display: flex; }
+        }
+        .mob-tab-btn { transition: all 0.2s; }
+        .mob-tab-btn.active { color: #10b981; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); }
+        .desk-tab-btn.active { background: #1e293b; color: #10b981; }
+        input[type="range"] { accent-color: #10b981; }
+    </style>
+</head>
+
+<body class="flex flex-col">
+    <!-- HEADER (Dengan Tombol Pro) -->
+    <header class="h-14 bg-[#090d15] border-b border-borderDark flex items-center justify-between px-4 shrink-0 z-20">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-600 to-cyan-500 flex items-center justify-center font-black text-slate-950 text-xs shadow-md">v1</div>
+            <div>
+                <h1 class="font-bold text-slate-100 text-sm md:text-base tracking-wide flex items-center gap-2">
+                    MOTION STUDIO <span class="text-xs font-semibold text-emerald-400">by Razka</span>
+                </h1>
+                <p class="text-[10px] text-slate-400 font-mono tracking-tight" id="header-res-info">1080p • 16:9 • 30 FPS</p>
+            </div>
+        </div>
+        <div class="hidden md:flex items-center gap-2">
+            <a href="http://lynk.id/muvista/j7jzvl97o5xz/checkout" target="_blank" class="px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 text-xs font-black tracking-wide shadow-lg shadow-orange-500/20 transition-all flex items-center gap-1">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2l1.29 3.97a1 1 0 00.95.69h4.17l-3.38 2.45a1 1 0 00-.36 1.11l1.29 3.97-3.38-2.45a1 1 0 00-1.18 0l-3.38 2.45 1.29-3.97a1 1 0 00-.36-1.11L2.59 6.66h4.17a1 1 0 00.95-.69L10 2z"/></svg>
+                UPGRADE PRO (4K/60FPS)
+            </a>
+            <div class="px-3 py-1 rounded-full bg-slate-900 border border-borderDark text-xs font-mono text-slate-300 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                <span>FREE VERSION</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN WORKSPACE -->
+    <main class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+        <!-- PANE: PREVIEW -->
+        <section id="pane-preview" class="tab-pane active md:w-1/2 lg:w-3/5 bg-oled relative border-r border-borderDark">
+            <div class="h-11 bg-[#0a0e17] border-b border-borderDark/80 px-3 flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span><span class="text-xs font-semibold text-slate-300">Live Stage</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-[11px] font-mono text-emerald-400 bg-emerald-950/50 border border-emerald-900/60 px-2 py-0.5 rounded-full" id="time-display">0.00s</span>
+                </div>
+            </div>
+            <div class="flex-1 p-3 md:p-6 flex flex-col items-center justify-center relative overflow-hidden bg-gradient-to-b from-[#05070a] to-[#0a0e16]">
+                <div id="canvas-container" class="checkerboard-bg rounded-2xl border border-slate-800 shadow-2xl relative flex items-center justify-center overflow-hidden transition-all duration-300 w-full max-w-3xl aspect-video my-auto">
+                    <canvas id="preview-canvas" width="1920" height="1080" class="w-full h-full object-contain pointer-events-none"></canvas>
+                </div>
+                <div class="w-full max-w-md mt-4 bg-card border border-borderDark p-2 rounded-2xl flex items-center gap-2 shadow-lg shrink-0">
+                    <button id="btn-play" class="flex-1 h-10 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 transition-all"><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> PLAY</button>
+                    <button id="btn-pause" class="flex-1 h-10 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 font-semibold text-xs flex items-center justify-center gap-2 border border-slate-700 transition-all"><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg> PAUSE</button>
+                    <button id="btn-reset" class="w-10 h-10 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-300 flex items-center justify-center border border-slate-700 transition-all"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg></button>
+                </div>
+                <div class="w-full max-w-md mt-2 flex items-center px-1">
+                    <input type="range" id="timeline-slider" min="0" max="30" step="0.01" value="0" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer">
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT PANE -->
+        <section class="flex-1 md:w-1/2 lg:w-2/5 flex flex-col bg-[#090d15] relative overflow-hidden">
+            <div class="hidden md:flex h-11 bg-[#0d121c] border-b border-borderDark px-2 items-center gap-1 shrink-0 pt-1">
+                <button class="desk-tab-btn active px-4 py-1.5 rounded-t-lg text-xs font-bold text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all" data-target="pane-code">Editor</button>
+                <button class="desk-tab-btn px-4 py-1.5 rounded-t-lg text-xs font-bold text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all" data-target="pane-prompt">AI Prompt</button>
+                <button class="desk-tab-btn px-4 py-1.5 rounded-t-lg text-xs font-bold text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all" data-target="pane-settings">Settings</button>
+            </div>
+
+            <div class="flex-1 relative overflow-hidden flex flex-col">
+                <!-- PANE: CODE EDITOR -->
+                <div id="pane-code" class="tab-pane active">
+                    <div class="p-2 bg-card border-b border-borderDark flex items-center justify-between shrink-0">
+                        <select id="preset-select" class="bg-slate-950 border border-slate-700 rounded-lg px-2 py-1.5 text-xs font-semibold text-emerald-400 outline-none">
+                            <option value="hud">Preset: Cyber HUD</option>
+                            <option value="particles">Preset: Neon Vortex</option>
+                            <option value="wave">Preset: Audio Wave</option>
+                        </select>
+                        <button id="btn-format" class="px-3 py-1.5 bg-slate-800 text-slate-300 rounded-lg text-xs font-medium border border-slate-700 transition-all hover:bg-slate-700">Rapihkan</button>
+                    </div>
+                    <div class="flex-1 flex flex-col relative bg-[#06090e]">
+                        <textarea id="code-editor" class="flex-1 w-full bg-[#080c14] border-0 p-4 text-slate-200 mono text-xs md:text-sm leading-relaxed outline-none resize-none" spellcheck="false"></textarea>
+                    </div>
+                </div>
+
+                <!-- PANE: AI PROMPT -->
+                <div id="pane-prompt" class="tab-pane bg-[#0a0e17] overflow-y-auto p-4 md:p-6 space-y-4">
+                    <div class="border-b border-borderDark pb-2 mb-4">
+                        <h2 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            AI Prompt Generator
+                        </h2>
+                    </div>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="text-xs font-bold text-slate-300 mb-1 block">Video Model</label>
+                            <input type="text" id="prompt-model" placeholder="Contoh: Futuristic Cyberpunk UI" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-300 mb-1 block">Video Version</label>
+                            <input type="text" id="prompt-version" placeholder="Contoh: V2 (Lebih dinamis dan glowing)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-300 mb-1 block">Category</label>
+                            <input type="text" id="prompt-category" placeholder="Contoh: Sci-Fi / Abstract Background" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+                    <div class="pt-2">
+                        <label class="text-xs font-bold text-slate-300 mb-1 block">Hasil Prompt</label>
+                        <textarea id="prompt-output" readonly class="w-full h-40 bg-[#080c14] border border-slate-700 rounded-lg p-3 text-emerald-300 mono text-[11px] resize-none outline-none"></textarea>
+                    </div>
+                    <button id="btn-copy-prompt" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-sm rounded-xl shadow-lg transition-all flex justify-center items-center gap-2">
+                        Salin Prompt ke Clipboard
+                    </button>
+                    <div class="h-8 md:h-0"></div>
+                </div>
+
+                <!-- PANE: SETTINGS (KUNCI UI) -->
+                <div id="pane-settings" class="tab-pane bg-[#0a0e17] overflow-y-auto p-4 md:p-6 space-y-5">
+                    
+                    <div class="bg-card border border-borderDark rounded-xl p-4 space-y-4 shadow-sm relative">
+                        <div class="absolute top-2 right-2 px-2 py-0.5 bg-slate-800 text-[9px] font-bold text-slate-400 rounded-md">FREE LIMIT</div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-300 block mb-2">Resolusi Video (Max Edge)</label>
+                            <div class="grid grid-cols-4 gap-2">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="res" value="720" class="peer sr-only">
+                                    <div class="text-center py-1.5 rounded-lg border border-slate-700 text-xs font-bold text-slate-400 peer-checked:bg-emerald-900/50 peer-checked:text-emerald-400 peer-checked:border-emerald-500 transition-all">720p</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="res" value="1080" class="peer sr-only" checked>
+                                    <div class="text-center py-1.5 rounded-lg border border-slate-700 text-xs font-bold text-slate-400 peer-checked:bg-emerald-900/50 peer-checked:text-emerald-400 peer-checked:border-emerald-500 transition-all">1080p</div>
+                                </label>
+                                <!-- KUNCI 2K & 4K -->
+                                <label class="cursor-not-allowed opacity-40" title="Upgrade ke Pro untuk 2K">
+                                    <input type="radio" name="res" value="1440" class="peer sr-only" disabled>
+                                    <div class="text-center py-1.5 rounded-lg border border-slate-800 text-xs font-bold text-slate-600">2K (PRO)</div>
+                                </label>
+                                <label class="cursor-not-allowed opacity-40" title="Upgrade ke Pro untuk 4K">
+                                    <input type="radio" name="res" value="2160" class="peer sr-only" disabled>
+                                    <div class="text-center py-1.5 rounded-lg border border-slate-800 text-xs font-bold text-slate-600">4K (PRO)</div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-xs font-bold text-slate-300 block mb-2">Rasio Aspek</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="aspect" value="16:9" class="peer sr-only" checked>
+                                    <div class="flex flex-col items-center justify-center py-2 rounded-lg border border-slate-700 peer-checked:bg-cyan-900/30 peer-checked:text-cyan-400 peer-checked:border-cyan-500 transition-all"><span class="text-[10px] font-bold">16:9</span></div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="aspect" value="9:16" class="peer sr-only">
+                                    <div class="flex flex-col items-center justify-center py-2 rounded-lg border border-slate-700 peer-checked:bg-cyan-900/30 peer-checked:text-cyan-400 peer-checked:border-cyan-500 transition-all"><span class="text-[10px] font-bold">9:16</span></div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="aspect" value="1:1" class="peer sr-only">
+                                    <div class="flex flex-col items-center justify-center py-2 rounded-lg border border-slate-700 peer-checked:bg-cyan-900/30 peer-checked:text-cyan-400 peer-checked:border-cyan-500 transition-all"><span class="text-[10px] font-bold">1:1</span></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-card border border-borderDark rounded-xl p-4 space-y-4 shadow-sm relative">
+                        <div class="absolute top-2 right-2 px-2 py-0.5 bg-slate-800 text-[9px] font-bold text-slate-400 rounded-md">FREE LIMIT</div>
+                        
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs font-bold text-slate-300">Frame Rate (FPS)</label>
+                            <!-- KUNCI 60 FPS -->
+                            <select id="set-fps" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-1 text-xs font-bold text-white outline-none">
+                                <option value="24">24 FPS</option>
+                                <option value="30" selected>30 FPS</option>
+                                <option value="60" disabled>60 FPS (PRO)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="border-t border-slate-800 pt-3">
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="text-xs font-bold text-slate-300">Bitrate Target</label>
+                                <span class="text-xs font-mono font-bold text-emerald-400" id="bitrate-label">40 Mbps</span>
+                            </div>
+                            <input type="range" id="set-bitrate" min="1" max="120" value="40" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer">
+                        </div>
+
+                        <div class="border-t border-slate-800 pt-3">
+                            <div class="flex items-center justify-between">
+                                <label class="text-xs font-bold text-slate-300">Durasi (Max 30s)</label>
+                                <!-- BATASI DURASI 30 DETIK -->
+                                <input type="number" id="set-duration" value="6" min="1" max="30" class="w-16 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-center font-mono font-bold text-emerald-400 text-xs outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="btn-export" class="w-full py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 active:scale-95 text-slate-950 font-black text-sm tracking-widest shadow-lg shadow-emerald-900/30 transition-all flex flex-col items-center justify-center gap-1">
+                        <span>RENDER VIDEO SEKARANG</span>
+                    </button>
+                    <div class="h-10 md:h-0"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MOBILE NAV -->
+    <nav class="md:hidden h-16 bg-[#080b12] border-t border-borderDark flex items-center justify-around px-1 shrink-0 z-30">
+        <button class="mob-tab-btn active flex-1 h-14 rounded-xl flex flex-col items-center justify-center gap-1 text-slate-400 font-medium text-[10px]" data-target="pane-preview">Preview</button>
+        <button class="mob-tab-btn flex-1 h-14 rounded-xl flex flex-col items-center justify-center gap-1 text-slate-400 font-medium text-[10px]" data-target="pane-code">Code</button>
+        <button class="mob-tab-btn flex-1 h-14 rounded-xl flex flex-col items-center justify-center gap-1 text-slate-400 font-medium text-[10px]" data-target="pane-prompt">Prompt</button>
+        <button class="mob-tab-btn flex-1 h-14 rounded-xl flex flex-col items-center justify-center gap-1 text-slate-400 font-medium text-[10px]" data-target="pane-settings">Settings</button>
+    </nav>
+
+    <!-- MODALS & OVERLAYS -->
+    <div id="app-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-[100] flex items-center justify-center p-4">
+        <div class="bg-card border border-borderDark rounded-2xl max-w-sm w-full p-6 shadow-2xl">
+            <h3 id="app-modal-title" class="text-lg font-bold text-slate-100 mb-2">Pesan</h3>
+            <p id="app-modal-desc" class="text-sm text-slate-400 mb-6 break-words">Deskripsi</p>
+            <button onclick="document.getElementById('app-modal').classList.add('hidden')" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl font-bold transition-all">Tutup</button>
+        </div>
+    </div>
+    <div id="render-overlay" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-6 hidden z-50">
+        <div class="w-full max-w-sm bg-card border border-borderDark rounded-2xl p-6 flex flex-col items-center text-center shadow-2xl">
+            <h3 class="text-lg font-bold text-slate-100 mb-1">Merekam Video MP4...</h3>
+            <p id="render-info-status" class="text-xs text-slate-400 mb-5 font-mono">Loading...</p>
+            <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden p-0 mb-2">
+                <div id="progress-bar" class="bg-gradient-to-r from-emerald-500 to-cyan-400 h-full w-0 transition-all duration-75"></div>
+            </div>
+            <div id="progress-text" class="text-xs font-mono font-bold text-emerald-300">Frame 0 / 0 (0%)</div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SCRIPT 1: TERBACA (BISA DIEDIT PEMBELI)    -->
+    <!-- ========================================== -->
+    <script>
+        function showMsg(title, desc, isError = false) {
+            document.getElementById('app-modal-title').innerText = title;
+            document.getElementById('app-modal-title').className = isError ? 'text-lg font-bold text-rose-500 mb-2' : 'text-lg font-bold text-slate-100 mb-2';
+            document.getElementById('app-modal-desc').innerText = desc;
+            document.getElementById('app-modal').classList.remove('hidden');
+        }
+
+        const PRESETS = {
+            hud: `// HUD Cyber Scanner\nfunction draw(ctx, width, height, time) {\n    ctx.fillStyle = '#00FF00';\n    ctx.fillRect(0, 0, width, height);\n    const cx = width / 2;\n    const cy = height / 2;\n    const scale = Math.min(width, height) * 0.0022;\n    const R = 300 * scale; \n    ctx.save();\n    ctx.translate(cx, cy);\n    ctx.rotate(time);\n    ctx.lineWidth = 10 * scale;\n    ctx.setLineDash([40 * scale, 20 * scale]);\n    ctx.strokeStyle = '#00e5ff';\n    ctx.beginPath();\n    ctx.arc(0, 0, R, 0, Math.PI * 2);\n    ctx.stroke();\n    ctx.restore();\n}`,
+            particles: `// Neon Vortex\nfunction draw(ctx, width, height, time) {\n    ctx.fillStyle = '#05070a';\n    ctx.fillRect(0, 0, width, height);\n    const cx = width / 2;\n    const cy = height / 2;\n    const count = 80;\n    const scale = Math.min(width, height) * 0.002;\n    ctx.save();\n    ctx.translate(cx, cy);\n    for (let i = 0; i < count; i++) {\n        let angle = (i / count) * Math.PI * 2 + time * 0.8;\n        let dist = (Math.sin(time * 2 + i * 0.1) * 0.3 + 0.6) * (Math.min(width, height) * 0.3);\n        let x = Math.cos(angle) * dist;\n        let y = Math.sin(angle) * dist;\n        ctx.fillStyle = \`hsl(\${(i * 5 + time * 50) % 360}, 100%, 70%)\`;\n        ctx.beginPath();\n        ctx.arc(x, y, 10 * scale, 0, Math.PI * 2);\n        ctx.fill();\n    }\n    ctx.restore();\n}`,
+            wave: `// Audio Wave\nfunction draw(ctx, width, height, time) {\n    ctx.fillStyle = '#080c14';\n    ctx.fillRect(0, 0, width, height);\n    const cx = width / 2;\n    const cy = height / 2;\n    const radius = Math.min(width, height) * 0.2;\n    ctx.save();\n    ctx.translate(cx, cy);\n    for (let i = 0; i < 32; i++) {\n        let angle = (i / 32) * Math.PI * 2;\n        let amp = Math.sin(time * 5 + i * 0.5) * 0.5 + 0.5;\n        let x1 = Math.cos(angle) * radius;\n        let y1 = Math.sin(angle) * radius;\n        let x2 = Math.cos(angle) * (radius + amp * radius);\n        let y2 = Math.sin(angle) * (radius + amp * radius);\n        ctx.strokeStyle = '#10b981';\n        ctx.lineWidth = Math.min(width, height) * 0.008;\n        ctx.lineCap = 'round';\n        ctx.beginPath();\n        ctx.moveTo(x1, y1);\n        ctx.lineTo(x2, y2);\n        ctx.stroke();\n    }\n    ctx.restore();\n}`
+        };
+    </script>
+
+    <!-- ========================================== -->
+    <!-- SCRIPT 2: KODE INTI & PROTEKSI HARDCODE    -->
+    <!-- (BAGIAN INI YANG NANTINYA HARUS ANDA       -->
+    <!-- OBFUSCATE JIKA INGIN DIPERJUALBELIKAN)     -->
+    <!-- ========================================== -->
+    <script>
+        const state = { width: 1920, height: 1080, aspect: '16:9', resBase: 1080, fps: 30, bitrate: 40, duration: 6, time: 0, isPlaying: true, isExporting: false, userFunction: null, animationId: null, lastTimestamp: 0 };
+        const canvas = document.getElementById('preview-canvas');
+        const canvasContainer = document.getElementById('canvas-container');
+        const ctx = canvas.getContext('2d', { alpha: false });
+        const codeEditor = document.getElementById('code-editor');
+
+        function switchTab(targetId) {
+            document.querySelectorAll('.mob-tab-btn, .desk-tab-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.target === targetId));
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            if (window.innerWidth >= 768) {
+                document.getElementById('pane-preview').classList.add('active');
+                if(targetId !== 'pane-preview') document.getElementById(targetId)?.classList.add('active');
+                else { document.getElementById('pane-code').classList.add('active'); document.querySelector('.desk-tab-btn[data-target="pane-code"]').classList.add('active'); }
+            } else document.getElementById(targetId)?.classList.add('active');
+        }
+        document.querySelectorAll('.mob-tab-btn, .desk-tab-btn').forEach(btn => btn.addEventListener('click', (e) => switchTab(e.currentTarget.dataset.target)));
+        window.addEventListener('resize', () => switchTab(document.querySelector('.mob-tab-btn.active').dataset.target));
+
+        function updateDimensions() {
+            let resInput = document.querySelector('input[name="res"]:checked')?.value || "1080";
+            let aspectInput = document.querySelector('input[name="aspect"]:checked').value;
+            let fpsInput = document.getElementById('set-fps').value;
+            let bitInput = document.getElementById('set-bitrate').value;
+            let durInput = document.getElementById('set-duration').value;
+
+            // PROTEKSI HARDCODE JS UNTUK VERSI GRATIS (Anti Inspect Element)
+            state.resBase = Math.min(parseInt(resInput), 1080); // Mengunci maks 1080p
+            state.fps = Math.min(parseInt(fpsInput), 30);       // Mengunci maks 30 FPS
+            state.duration = Math.max(1, Math.min(30, parseInt(durInput) || 30)); // Mengunci maks 30 detik
+
+            // Kembalikan UI jika dicurangi
+            if(parseInt(resInput) > 1080) document.querySelector('input[name="res"][value="1080"]').checked = true;
+            document.getElementById('set-fps').value = state.fps;
+            document.getElementById('set-duration').value = state.duration;
+
+            state.aspect = aspectInput;
+            state.bitrate = parseInt(bitInput);
+            
+            document.getElementById('timeline-slider').max = state.duration;
+            document.getElementById('bitrate-label').innerText = `${state.bitrate} Mbps`;
+
+            if (state.aspect === '16:9') { state.height = state.resBase; state.width = Math.round(state.resBase * 16 / 9); canvasContainer.style.aspectRatio = "16/9"; } 
+            else if (state.aspect === '9:16') { state.width = state.resBase; state.height = Math.round(state.resBase * 16 / 9); canvasContainer.style.aspectRatio = "9/16"; } 
+            else if (state.aspect === '1:1') { state.width = state.resBase; state.height = state.resBase; canvasContainer.style.aspectRatio = "1/1"; }
+
+            state.width = Math.floor(state.width / 2) * 2; state.height = Math.floor(state.height / 2) * 2;
+            canvas.width = state.width; canvas.height = state.height;
+            document.getElementById('header-res-info').innerText = `${state.resBase}p • ${state.aspect} • ${state.fps} FPS`;
+            
+            if(!state.isPlaying && !state.isExporting) renderFrame(state.time);
+        }
+
+        document.querySelectorAll('input[name="res"], input[name="aspect"]').forEach(el => el.addEventListener('change', updateDimensions));
+        document.getElementById('set-fps').addEventListener('change', updateDimensions);
+        document.getElementById('set-bitrate').addEventListener('input', updateDimensions);
+        document.getElementById('set-duration').addEventListener('change', updateDimensions);
+
+        function generatePrompt() {
+            const m = document.getElementById('prompt-model').value || '[Video Model]';
+            const v = document.getElementById('prompt-version').value || '[Video Version]';
+            const c = document.getElementById('prompt-category').value || '[Category]';
+            document.getElementById('prompt-output').value = `MASTER PROMPT — PROFESSIONAL CANVAS JS MOTION VIDEO GENERATOR\nAct as a Senior Creative Coder... \n\nMODEL: ${m}\nVERSION: ${v}\nCATEGORY: ${c}\n(Copy sisa prompt aslinya di sini)`;
+        }
+        ['prompt-model', 'prompt-version', 'prompt-category'].forEach(id => document.getElementById(id).addEventListener('input', generatePrompt));
+        document.getElementById('btn-copy-prompt').addEventListener('click', () => {
+            const text = document.getElementById('prompt-output').value;
+            if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => showMsg('Berhasil', 'Prompt disalin ke clipboard!'));
+            else { document.getElementById('prompt-output').select(); document.execCommand('copy'); showMsg('Berhasil', 'Prompt disalin ke clipboard!'); }
+        });
+
+        function compileCode() {
+            try {
+                const func = new Function('ctx', 'width', 'height', 'time', codeEditor.value + '\nreturn typeof draw === "function" ? draw(ctx, width, height, time) : null;');
+                state.userFunction = func;
+                if (!state.isPlaying && !state.isExporting) renderFrame(state.time);
+            } catch (err) { state.userFunction = null; }
+        }
+
+        function renderFrame(timeSec) {
+            ctx.setTransform(1, 0, 0, 1, 0, 0); 
+            if (state.userFunction) {
+                try { ctx.save(); state.userFunction(ctx, state.width, state.height, timeSec); ctx.restore(); } 
+                catch(e) { ctx.fillStyle = '#00FF00'; ctx.fillRect(0, 0, state.width, state.height); ctx.fillStyle = 'red'; ctx.font = `${Math.max(20, state.width * 0.02)}px monospace`; ctx.fillText("Error: " + e.message, state.width*0.05, state.height*0.1); }
+            } else { ctx.fillStyle = '#00FF00'; ctx.fillRect(0, 0, state.width, state.height); }
+        }
+
+        function liveLoop(timestamp) {
+            if (state.isExporting) return;
+            if (!state.lastTimestamp) state.lastTimestamp = timestamp;
+            const delta = (timestamp - state.lastTimestamp) / 1000;
+            state.lastTimestamp = timestamp;
+            if (state.isPlaying) {
+                state.time += delta;
+                if (state.time > state.duration) state.time = 0; 
+                renderFrame(state.time);
+                document.getElementById('time-display').innerText = `${state.time.toFixed(2)}s`;
+                document.getElementById('timeline-slider').value = state.time;
+            }
+            state.animationId = requestAnimationFrame(liveLoop);
+        }
+
+        async function startExport() {
+            if (state.isExporting || !state.userFunction) return;
+            if (typeof VideoEncoder === 'undefined' || typeof Mp4Muxer === 'undefined') { showMsg("Error", "Browser tidak mendukung WebCodecs", true); return; }
+
+            state.isExporting = true; state.isPlaying = false;
+            cancelAnimationFrame(state.animationId);
+
+            const overlay = document.getElementById('render-overlay');
+            const pBar = document.getElementById('progress-bar');
+            const pText = document.getElementById('progress-text');
+            const pStatus = document.getElementById('render-info-status');
+            
+            overlay.classList.remove('hidden'); pBar.style.width = '0%'; pText.innerText = `Menyiapkan...`;
+
+            const totalFrames = Math.floor(state.duration * state.fps);
+            const frameDuration = 1 / state.fps;
+
+            try {
+                const baseTargetBitrate = state.bitrate * 1_000_000;
+                let videoConfig = null;
+                const codecs = ['avc1.640034', 'avc1.4d0034', 'avc1.420034', 'avc1.640028', 'avc1.4d0028', 'avc1.420028', 'avc1.42E01F', 'avc1.42001E'];
+                const accelerations = ['prefer-hardware', 'no-preference', 'prefer-software'];
+                const bitrateMultipliers = [1, 0.75, 0.5, 0.25]; 
+                
+                pStatus.innerText = "Mencari Konfigurasi Hardware...";
+                
+                findConfig: for (let hw of accelerations) {
+                    for (let codec of codecs) {
+                        for (let mult of bitrateMultipliers) {
+                            const testBitrate = Math.floor(baseTargetBitrate * mult);
+                            const testConfig = { codec: codec, width: state.width, height: state.height, bitrate: testBitrate, bitrateMode: 'constant', framerate: state.fps, hardwareAcceleration: hw };
+                            try { const support = await VideoEncoder.isConfigSupported(testConfig); if (support.supported) { videoConfig = testConfig; break findConfig; } } catch (e) {}
+                        }
+                    }
+                }
+
+                if (!videoConfig) throw new Error(`Resolusi tidak didukung`);
+
+                let muxer = new Mp4Muxer.Muxer({ target: new Mp4Muxer.ArrayBufferTarget(), video: { codec: 'avc', width: state.width, height: state.height }, fastStart: 'in-memory' });
+                let encoderError = null;
+                let encoder = new VideoEncoder({ output: (chunk, meta) => muxer.addVideoChunk(chunk, meta), error: (e) => { encoderError = e; } });
+
+                encoder.configure(videoConfig);
+
+                for (let i = 0; i < totalFrames; i++) {
+                    if (encoderError) throw new Error(encoderError.message);
+                    const currentTime = i * frameDuration;
+                    renderFrame(currentTime);
+                    let frame = new VideoFrame(canvas, { timestamp: i * Math.floor(1000000 / state.fps) });
+                    try { encoder.encode(frame, { keyFrame: i % state.fps === 0 }); } catch (err) { frame.close(); throw err; }
+                    frame.close();
+                    while (encoder.encodeQueueSize > 1) { if (encoderError) break; await new Promise(r => requestAnimationFrame(r)); }
+                    if (i % 5 === 0 || i === totalFrames - 1) {
+                        const percent = Math.round(((i + 1) / totalFrames) * 100);
+                        pBar.style.width = `${percent}%`; pText.innerText = `Frame ${i + 1} / ${totalFrames} (${percent}%)`;
+                        await new Promise(r => setTimeout(r, 0));
+                    }
+                }
+
+                if (encoderError) throw new Error(encoderError.message);
+                pStatus.innerText = `Mengepak file MP4...`;
+                await encoder.flush(); muxer.finalize(); encoder.close();
+
+                let finalBlob = new Blob([muxer.target.buffer], { type: 'video/mp4' });
+                const url = URL.createObjectURL(finalBlob);
+                const a = document.createElement('a'); a.style.display = 'none'; a.href = url;
+                a.download = `Export_${state.width}x${state.height}_${state.fps}fps.mp4`;
+                document.body.appendChild(a); a.click();
+                setTimeout(() => { document.body.removeChild(a); window.URL.revokeObjectURL(url); }, 200);
+
+            } catch (err) { showMsg("Gagal Merender Video", err.message, true); } 
+            finally { state.isExporting = false; overlay.classList.add('hidden'); state.time = 0; state.isPlaying = true; state.lastTimestamp = performance.now(); liveLoop(performance.now()); }
+        }
+
+        document.getElementById('preset-select').addEventListener('change', (e) => { codeEditor.value = PRESETS[e.target.value]; compileCode(); });
+        document.getElementById('btn-format').addEventListener('click', () => { let code = codeEditor.value; code = code.replace(/;\s*/g, ';\n').replace(/{\s*/g, '{\n  ').replace(/}\s*/g, '\n}\n'); codeEditor.value = code; compileCode(); });
+        let typingTimer; codeEditor.addEventListener('input', () => { clearTimeout(typingTimer); typingTimer = setTimeout(compileCode, 400); });
+        document.getElementById('btn-play').addEventListener('click', () => { state.isPlaying = true; state.lastTimestamp = performance.now(); });
+        document.getElementById('btn-pause').addEventListener('click', () => { state.isPlaying = false; });
+        document.getElementById('btn-reset').addEventListener('click', () => { state.time = 0; renderFrame(0); });
+        document.getElementById('timeline-slider').addEventListener('input', (e) => { state.isPlaying = false; state.time = parseFloat(e.target.value); renderFrame(state.time); document.getElementById('time-display').innerText = `${state.time.toFixed(2)}s`; });
+        document.getElementById('btn-export').addEventListener('click', startExport);
+
+        codeEditor.value = PRESETS.hud; generatePrompt(); updateDimensions(); compileCode();
+        state.lastTimestamp = performance.now(); requestAnimationFrame(liveLoop);
+        if(window.innerWidth >= 768) { switchTab('pane-code'); }
+    </script>
+</body>
+</html>
