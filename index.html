@@ -363,7 +363,185 @@
             const m = document.getElementById('prompt-model').value || '[Video Model]';
             const v = document.getElementById('prompt-version').value || '[Video Version]';
             const c = document.getElementById('prompt-category').value || '[Category]';
-            document.getElementById('prompt-output').value = `MASTER PROMPT — PROFESSIONAL CANVAS JS MOTION VIDEO GENERATOR\nAct as a Senior Creative Coder... \n\nMODEL: ${m}\nVERSION: ${v}\nCATEGORY: ${c}\n(Copy sisa prompt aslinya di sini)`;
+            document.getElementById('prompt-output').value = `MASTER PROMPT — PROFESSIONAL CANVAS JS MOTION VIDEO GENERATOR\nAct as a Senior Creative Coder... \n\nMODEL: ${m}\nVERSION: ${v}\nCATEGORY: ${c}\nVISUAL CONCEPT: Develop a professional visual concept that matches the selected model and version. The result must have a distinct visual identity, meaningful animation, and practical commercial applications.
+
+
+
+2. TECHNICAL REQUIREMENTS
+
+The generated code must follow these specifications:
+
+Use pure JavaScript and HTML5 Canvas.
+Do not use SVG, external images, external videos, external assets, or third-party libraries.
+The main animation function must use this exact signature:
+function draw(ctx, width, height, time)
+
+Must be fully compatible with my 4K Motion Studio environment.
+Target resolution: 3840 × 2160 pixels (4K UHD).
+Target frame rate: 30 FPS.
+Animation duration: 15 seconds.
+Export format: MP4 H.264.
+The animation must create a genuinely seamless loop.
+Support different canvas dimensions through the width and height parameters.
+Use ctx.save() and ctx.restore() appropriately.
+Optimize the code for efficient rendering and stable performance.
+
+
+3. PROFESSIONAL VISUAL QUALITY
+
+Create visuals that meet professional commercial microstock standards:
+
+Modern, polished, clean, and visually appealing.
+Balanced composition with intentional visual hierarchy.
+Rich visual details suitable for 4K resolution.
+Smooth, natural, and consistent motion.
+Use professional lighting, gradients, shadows, and visual effects where appropriate.
+Do not include text, letters, numbers, logos, watermarks, or trademarks unless explicitly required by the concept.
+Avoid simplistic, unfinished, or generic-looking animations.
+Ensure the footage has practical commercial applications in presentations, technology, business, advertising, education, or other relevant industries.
+
+
+4. ANIMATION AND SEAMLESS LOOP REQUIREMENTS
+
+Use the time parameter as the foundation for all animation.
+Use mathematical functions such as sine, cosine, interpolation, and periodic motion to create smooth animation.
+Do not use Math.random() directly inside the animation loop.
+If particles are required, use deterministic particle positions and properties.
+All animated elements must follow periodic motion and return naturally to their initial states at the end of the duration.
+Avoid sudden transitions, flickering, jitter, inconsistent movement, and visual discontinuities.
+Do not simply hide or remove objects at the final frame to simulate a loop.
+Ensure the final frame transitions naturally into the first frame.
+
+
+5. VERSION-SPECIFIC VISUAL RULES
+
+Adapt the visual design according to the selected version.
+
+Examples:
+
+Dark Blue
+
+Dark background with professional blue lighting and glowing accents.
+Strong contrast and sophisticated technology aesthetics.
+Light Corporate
+
+Bright, clean, minimal, and professional background.
+Suitable for corporate presentations and business applications.
+Green Screen Overlay
+
+Use a perfectly solid RGB green background (0, 255, 0).
+No gradients, shadows, textures, or transparency on the green background.
+Keep the main animated elements clearly separated from the background.
+Avoid green colors in the foreground elements whenever possible to prevent chroma-key removal.
+Vertical 9:16
+
+Design the composition specifically for a vertical aspect ratio.
+Do not simply crop the landscape composition.
+Reposition and scale all elements to create a balanced vertical layout.
+Copy Space
+
+Leave a genuinely large and clean empty area for text placement.
+Keep important animated elements away from the designated copy space.
+Ensure the empty area remains visually clean throughout the animation.
+These examples are guidelines, not rigid templates. Always prioritize the selected version's actual visual requirements.
+
+
+
+6. CODE OPTIMIZATION
+
+Use clean, structured, and readable JavaScript.
+Avoid unnecessary repeated calculations.
+Avoid excessive particles and computationally expensive effects.
+Use ctx.imageSmoothingEnabled and appropriate rendering settings when necessary.
+Ensure there are no JavaScript syntax errors or undefined variables.
+Do not use requestAnimationFrame, setInterval, or setTimeout.
+Do not rely on browser APIs or external runtime dependencies.
+All animation states must be calculated directly from the provided time parameter.
+The code must render correctly when individual frames are requested at arbitrary timestamps.
+
+
+7. MICROSTOCK COMMERCIAL QUALITY CONTROL
+
+Before writing the code, evaluate the concept using these criteria:
+
+Does the visual accurately represent the selected video model and version?
+2. Does it have practical commercial value for stock footage buyers?
+
+3. Is the composition visually professional and well balanced?
+
+4. Is the animation smooth and genuinely seamless?
+
+5. Does it avoid looking overly simplistic or generic?
+
+6. Is it sufficiently different from other versions to avoid near-duplicate content?
+
+7. Does the animation communicate a clear visual concept without unnecessary decoration?
+
+If the initial concept is weak, improve the visual direction before generating the code.
+
+
+
+8. REQUIRED OUTPUT FORMAT
+
+Organize your response into the following sections:
+
+A. VIDEO INFORMATION
+
+Video model
+Video version
+Category
+Short visual concept description
+B. COMPLETE JAVASCRIPT CANVAS CODE
+
+Provide one complete, ready-to-use JavaScript code block.
+
+The code must be directly copyable into the 4K Motion Studio code editor.
+
+Important:
+
+Do not provide incomplete code snippets.
+Do not use placeholders inside the generated code.
+Do not ask me to combine multiple code sections.
+Do not provide HTML or CSS.
+Only provide the JavaScript Canvas code.
+C. RENDER SETTINGS
+
+Resolution
+Frame rate
+Duration
+Export format
+Loop type
+D. FINAL QUALITY CHECK
+
+Confirm that:
+
+The code is complete.
+No external assets are required.
+The function signature is compatible with draw(ctx, width, height, time).
+The animation is designed for seamless looping.
+The code is ready to test in 4K Motion Studio.
+
+
+9. IMPORTANT GENERATION RULES
+
+Whenever I provide a different video model or version, create a new visual design and a new complete code implementation specifically for that request.
+
+Do not merely recolor or slightly modify previously generated code.
+
+Each version must have meaningful visual differences through composition, shapes, animation behavior, lighting, effects, or commercial use cases.
+
+
+
+PRIMARY OBJECTIVES:
+
+Professional 4K visual quality.
+Genuine seamless looping.
+Efficient and stable rendering.
+Commercial microstock suitability.
+Distinct visual identity for every version.
+
+
+Now generate the complete JavaScript Canvas code based on the VIDEO MODEL and VIDEO VERSION provided above.`;
         }
         ['prompt-model', 'prompt-version', 'prompt-category'].forEach(id => document.getElementById(id).addEventListener('input', generatePrompt));
         document.getElementById('btn-copy-prompt').addEventListener('click', () => {
