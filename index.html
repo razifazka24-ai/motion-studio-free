@@ -19,8 +19,8 @@
         }
     </script>
 
-    <!-- MP4 Muxer for WebCodecs MP4 generation -->
-    <script src="https://unpkg.com/mp4-muxer/build/mp4-muxer.js"></script>
+    <!-- MP4 Muxer for WebCodecs MP4 generation (with jsDelivr fallback) -->
+    <script src="https://unpkg.com/mp4-muxer/build/mp4-muxer.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mp4-muxer/build/mp4-muxer.js';"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -65,7 +65,7 @@
             </div>
         </div>
         <div class="hidden md:flex items-center gap-2">
-            <a href="http://lynk.id/muvista/j7jzvl97o5xz/checkout" target="_blank" class="px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 text-xs font-black tracking-wide shadow-lg shadow-orange-500/20 transition-all flex items-center gap-1">
+            <a href="http://lynk.id/muvista/j7jzvl97o5xz/checkout" target="_blank" rel="noopener noreferrer" class="px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 text-xs font-black tracking-wide shadow-lg shadow-orange-500/20 transition-all flex items-center gap-1">
                 <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2l1.29 3.97a1 1 0 00.95.69h4.17l-3.38 2.45a1 1 0 00-.36 1.11l1.29 3.97-3.38-2.45a1 1 0 00-1.18 0l-3.38 2.45 1.29-3.97a1 1 0 00-.36-1.11L2.59 6.66h4.17a1 1 0 00.95-.69L10 2z"/></svg>
                 UPGRADE PRO (4K/60FPS)
             </a>
@@ -95,10 +95,10 @@
                 <div class="w-full max-w-md mt-4 bg-card border border-borderDark p-2 rounded-2xl flex items-center gap-2 shadow-lg shrink-0">
                     <button id="btn-play" class="flex-1 h-10 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 transition-all"><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> PLAY</button>
                     <button id="btn-pause" class="flex-1 h-10 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 font-semibold text-xs flex items-center justify-center gap-2 border border-slate-700 transition-all"><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg> PAUSE</button>
-                    <button id="btn-reset" class="w-10 h-10 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-300 flex items-center justify-center border border-slate-700 transition-all"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg></button>
+                    <button id="btn-reset" title="Reset Waktu" class="w-10 h-10 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-300 flex items-center justify-center border border-slate-700 transition-all"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg></button>
                 </div>
                 <div class="w-full max-w-md mt-2 flex items-center px-1">
-                    <input type="range" id="timeline-slider" min="0" max="30" step="0.01" value="0" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer">
+                    <input type="range" id="timeline-slider" min="0" max="6" step="0.01" value="0" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer">
                 </div>
             </div>
         </section>
@@ -167,7 +167,6 @@
 
                 <!-- PANE: SETTINGS -->
                 <div id="pane-settings" class="tab-pane bg-[#0a0e17] overflow-y-auto p-4 md:p-6 space-y-5">
-                    
                     <div class="bg-card border border-borderDark rounded-xl p-4 space-y-4 shadow-sm relative">
                         <div class="absolute top-2 right-2 px-2 py-0.5 bg-slate-800 text-[9px] font-bold text-slate-400 rounded-md">FREE LIMIT</div>
                         <div>
@@ -243,7 +242,7 @@
                         <span>RENDER VIDEO SEKARANG</span>
                     </button>
                     
-                    <a href="http://lynk.id/muvista/j7jzvl97o5xz/checkout" target="_blank" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 text-xs font-black tracking-wide shadow-lg shadow-orange-500/20 transition-all flex items-center justify-center gap-2 mt-3">
+                    <a href="http://lynk.id/muvista/j7jzvl97o5xz/checkout" target="_blank" rel="noopener noreferrer" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 text-xs font-black tracking-wide shadow-lg shadow-orange-500/20 transition-all flex items-center justify-center gap-2 mt-3">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2l1.29 3.97a1 1 0 00.95.69h4.17l-3.38 2.45a1 1 0 00-.36 1.11l1.29 3.97-3.38-2.45a1 1 0 00-1.18 0l-3.38 2.45 1.29-3.97a1 1 0 00-.36-1.11L2.59 6.66h4.17a1 1 0 00.95-.69L10 2z"/></svg>
                         UPGRADE KE PRO (4K / 60FPS)
                     </a>
@@ -281,6 +280,7 @@
     </div>
 
     <script>
+        // Helper untuk menampilkan modal notifikasi kustom (pengganti alert)
         function showMsg(title, desc, isError = false) {
             document.getElementById('app-modal-title').innerText = title;
             document.getElementById('app-modal-title').className = isError ? 'text-lg font-bold text-rose-500 mb-2' : 'text-lg font-bold text-slate-100 mb-2';
@@ -288,30 +288,57 @@
             document.getElementById('app-modal').classList.remove('hidden');
         }
 
+        // Preset animasi bawaan
         const PRESETS = {
             hud: `// HUD Cyber Scanner\nfunction draw(ctx, width, height, time) {\n    ctx.fillStyle = '#05070a';\n    ctx.fillRect(0, 0, width, height);\n    const cx = width / 2;\n    const cy = height / 2;\n    const scale = Math.min(width, height) * 0.0022;\n    const R = 300 * scale;\n    ctx.save();\n    ctx.translate(cx, cy);\n    ctx.rotate(time);\n    ctx.lineWidth = 10 * scale;\n    ctx.setLineDash([40 * scale, 20 * scale]);\n    ctx.strokeStyle = '#00e5ff';\n    ctx.beginPath();\n    ctx.arc(0, 0, R, 0, Math.PI * 2);\n    ctx.stroke();\n    ctx.restore();\n}`,
             particles: `// Neon Vortex\nfunction draw(ctx, width, height, time) {\n    ctx.fillStyle = '#05070a';\n    ctx.fillRect(0, 0, width, height);\n    const cx = width / 2;\n    const cy = height / 2;\n    const count = 80;\n    const scale = Math.min(width, height) * 0.002;\n    ctx.save();\n    ctx.translate(cx, cy);\n    for (let i = 0; i < count; i++) {\n        let angle = (i / count) * Math.PI * 2 + time * 0.8;\n        let dist = (Math.sin(time * 2 + i * 0.1) * 0.3 + 0.6) * (Math.min(width, height) * 0.3);\n        let x = Math.cos(angle) * dist;\n        let y = Math.sin(angle) * dist;\n        ctx.fillStyle = 'hsl(' + ((i * 5 + time * 50) % 360) + ', 100%, 70%)';\n        ctx.beginPath();\n        ctx.arc(x, y, 10 * scale, 0, Math.PI * 2);\n        ctx.fill();\n    }\n    ctx.restore();\n}`,
             wave: `// Audio Wave\nfunction draw(ctx, width, height, time) {\n    ctx.fillStyle = '#080c14';\n    ctx.fillRect(0, 0, width, height);\n    const cx = width / 2;\n    const cy = height / 2;\n    const radius = Math.min(width, height) * 0.2;\n    ctx.save();\n    ctx.translate(cx, cy);\n    for (let i = 0; i < 32; i++) {\n        let angle = (i / 32) * Math.PI * 2;\n        let amp = Math.sin(time * 5 + i * 0.5) * 0.5 + 0.5;\n        let x1 = Math.cos(angle) * radius;\n        let y1 = Math.sin(angle) * radius;\n        let x2 = Math.cos(angle) * (radius + amp * radius);\n        let y2 = Math.sin(angle) * (radius + amp * radius);\n        ctx.strokeStyle = '#10b981';\n        ctx.lineWidth = Math.min(width, height) * 0.008;\n        ctx.lineCap = 'round';\n        ctx.beginPath();\n        ctx.moveTo(x1, y1);\n        ctx.lineTo(x2, y2);\n        ctx.stroke();\n    }\n    ctx.restore();\n}`
         };
 
-        const state = { width: 1920, height: 1080, aspect: '16:9', resBase: 1080, fps: 30, bitrate: 40, duration: 6, time: 0, isPlaying: true, isExporting: false, userFunction: null, animationId: null, lastTimestamp: 0 };
+        const state = {
+            width: 1920,
+            height: 1080,
+            aspect: '16:9',
+            resBase: 1080,
+            fps: 30,
+            bitrate: 40,
+            duration: 6,
+            time: 0,
+            isPlaying: true,
+            isExporting: false,
+            userFunction: null,
+            animationId: null,
+            lastTimestamp: 0
+        };
+
         const canvas = document.getElementById('preview-canvas');
         const canvasContainer = document.getElementById('canvas-container');
         const ctx = canvas.getContext('2d', { alpha: false });
         const codeEditor = document.getElementById('code-editor');
 
+        // Navigasi Tab Responsive (Mobile & Desktop)
         function switchTab(targetId) {
             document.querySelectorAll('.mob-tab-btn, .desk-tab-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.target === targetId));
             document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
             if (window.innerWidth >= 768) {
                 document.getElementById('pane-preview').classList.add('active');
-                if(targetId !== 'pane-preview') document.getElementById(targetId)?.classList.add('active');
-                else { document.getElementById('pane-code').classList.add('active'); document.querySelector('.desk-tab-btn[data-target="pane-code"]').classList.add('active'); }
-            } else document.getElementById(targetId)?.classList.add('active');
+                if (targetId !== 'pane-preview') {
+                    document.getElementById(targetId)?.classList.add('active');
+                } else {
+                    document.getElementById('pane-code').classList.add('active');
+                    document.querySelector('.desk-tab-btn[data-target="pane-code"]').classList.add('active');
+                }
+            } else {
+                document.getElementById(targetId)?.classList.add('active');
+            }
         }
         document.querySelectorAll('.mob-tab-btn, .desk-tab-btn').forEach(btn => btn.addEventListener('click', (e) => switchTab(e.currentTarget.dataset.target)));
-        window.addEventListener('resize', () => switchTab(document.querySelector('.mob-tab-btn.active').dataset.target));
+        window.addEventListener('resize', () => {
+            const activeMob = document.querySelector('.mob-tab-btn.active');
+            if (activeMob) switchTab(activeMob.dataset.target);
+        });
 
+        // Pembaruan Dimensi & Pengaturan Video
         function updateDimensions() {
             let resInput = document.querySelector('input[name="res"]:checked')?.value || "1080";
             let aspectInput = document.querySelector('input[name="aspect"]:checked').value;
@@ -319,29 +346,42 @@
             let bitInput = document.getElementById('set-bitrate').value;
             let durInput = document.getElementById('set-duration').value;
 
-            state.resBase = Math.min(parseInt(resInput), 1080);
-            state.fps = Math.min(parseInt(fpsInput), 30);
-            state.duration = Math.max(1, Math.min(30, parseInt(durInput) || 30));
+            state.resBase = Math.min(parseInt(resInput, 10), 1080);
+            state.fps = Math.min(parseInt(fpsInput, 10), 30);
+            state.duration = Math.max(1, Math.min(30, parseInt(durInput, 10) || 6));
 
-            if(parseInt(resInput) > 1080) document.querySelector('input[name="res"][value="1080"]').checked = true;
+            if (parseInt(resInput, 10) > 1080) document.querySelector('input[name="res"][value="1080"]').checked = true;
             document.getElementById('set-fps').value = state.fps;
             document.getElementById('set-duration').value = state.duration;
 
             state.aspect = aspectInput;
-            state.bitrate = parseInt(bitInput);
+            state.bitrate = parseInt(bitInput, 10);
             
             document.getElementById('timeline-slider').max = state.duration;
             document.getElementById('bitrate-label').innerText = state.bitrate + ' Mbps';
 
-            if (state.aspect === '16:9') { state.height = state.resBase; state.width = Math.round(state.resBase * 16 / 9); canvasContainer.style.aspectRatio = "16/9"; } 
-            else if (state.aspect === '9:16') { state.width = state.resBase; state.height = Math.round(state.resBase * 16 / 9); canvasContainer.style.aspectRatio = "9/16"; } 
-            else if (state.aspect === '1:1') { state.width = state.resBase; state.height = state.resBase; canvasContainer.style.aspectRatio = "1/1"; }
+            if (state.aspect === '16:9') {
+                state.height = state.resBase;
+                state.width = Math.round(state.resBase * 16 / 9);
+                canvasContainer.style.aspectRatio = "16/9";
+            } else if (state.aspect === '9:16') {
+                state.width = state.resBase;
+                state.height = Math.round(state.resBase * 16 / 9);
+                canvasContainer.style.aspectRatio = "9/16";
+            } else if (state.aspect === '1:1') {
+                state.width = state.resBase;
+                state.height = state.resBase;
+                canvasContainer.style.aspectRatio = "1/1";
+            }
 
-            state.width = Math.floor(state.width / 2) * 2; state.height = Math.floor(state.height / 2) * 2;
-            canvas.width = state.width; canvas.height = state.height;
+            // Pastikan dimensi genap untuk kompatibilitas encoder H.264 (YUV420)
+            state.width = Math.floor(state.width / 2) * 2;
+            state.height = Math.floor(state.height / 2) * 2;
+            canvas.width = state.width;
+            canvas.height = state.height;
             document.getElementById('header-res-info').innerText = state.resBase + 'p • ' + state.aspect + ' • ' + state.fps + ' FPS';
             
-            if(!state.isPlaying && !state.isExporting) renderFrame(state.time);
+            if (!state.isPlaying && !state.isExporting) renderFrame(state.time);
         }
 
         document.querySelectorAll('input[name="res"], input[name="aspect"]').forEach(el => el.addEventListener('change', updateDimensions));
@@ -349,6 +389,7 @@
         document.getElementById('set-bitrate').addEventListener('input', updateDimensions);
         document.getElementById('set-duration').addEventListener('change', updateDimensions);
 
+        // Generator Prompt AI
         function generatePrompt() {
             const m = document.getElementById('prompt-model').value || '[Video Model]';
             const v = document.getElementById('prompt-version').value || '[Video Version]';
@@ -360,29 +401,62 @@
 
         ['prompt-model', 'prompt-version', 'prompt-category', 'prompt-duration'].forEach(id => {
             const el = document.getElementById(id);
-            if(el) el.addEventListener('input', generatePrompt);
+            if (el) el.addEventListener('input', generatePrompt);
         });
+
+        function fallbackCopyText(text) {
+            const outputEl = document.getElementById('prompt-output');
+            outputEl.focus();
+            outputEl.select();
+            try {
+                document.execCommand('copy');
+                showMsg('Berhasil', 'Prompt disalin ke clipboard!');
+            } catch (e) {
+                showMsg('Info', 'Silakan salin teks prompt secara manual.', true);
+            }
+        }
 
         document.getElementById('btn-copy-prompt').addEventListener('click', () => {
             const text = document.getElementById('prompt-output').value;
-            if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => showMsg('Berhasil', 'Prompt disalin ke clipboard!'));
-            else { document.getElementById('prompt-output').select(); document.execCommand('copy'); showMsg('Berhasil', 'Prompt disalin ke clipboard!'); }
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text)
+                    .then(() => showMsg('Berhasil', 'Prompt disalin ke clipboard!'))
+                    .catch(() => fallbackCopyText(text));
+            } else {
+                fallbackCopyText(text);
+            }
         });
 
+        // Kompilasi Kode Animasi Pengguna
         function compileCode() {
             try {
                 const func = new Function('ctx', 'width', 'height', 'time', codeEditor.value + '\nreturn typeof draw === "function" ? draw(ctx, width, height, time) : null;');
                 state.userFunction = func;
                 if (!state.isPlaying && !state.isExporting) renderFrame(state.time);
-            } catch (err) { state.userFunction = null; }
+            } catch (err) {
+                state.userFunction = null;
+            }
         }
 
         function renderFrame(timeSec) {
             ctx.setTransform(1, 0, 0, 1, 0, 0); 
             if (state.userFunction) {
-                try { ctx.save(); state.userFunction(ctx, state.width, state.height, timeSec); ctx.restore(); } 
-                catch(e) { ctx.fillStyle = '#05070a'; ctx.fillRect(0, 0, state.width, state.height); ctx.fillStyle = '#f59e0b'; ctx.font = Math.max(20, state.width * 0.02) + 'px monospace'; ctx.fillText("Error: " + e.message, state.width*0.05, state.height*0.1); }
-            } else { ctx.fillStyle = '#05070a'; ctx.fillRect(0, 0, state.width, state.height); }
+                try {
+                    ctx.save();
+                    state.userFunction(ctx, state.width, state.height, timeSec);
+                    ctx.restore();
+                } catch (e) {
+                    ctx.restore();
+                    ctx.fillStyle = '#05070a';
+                    ctx.fillRect(0, 0, state.width, state.height);
+                    ctx.fillStyle = '#f59e0b';
+                    ctx.font = Math.max(20, state.width * 0.02) + 'px monospace';
+                    ctx.fillText("Error: " + e.message, state.width * 0.05, state.height * 0.1);
+                }
+            } else {
+                ctx.fillStyle = '#05070a';
+                ctx.fillRect(0, 0, state.width, state.height);
+            }
         }
 
         function liveLoop(timestamp) {
@@ -400,11 +474,131 @@
             state.animationId = requestAnimationFrame(liveLoop);
         }
 
+        /**
+         * Menjalankan satu sesi encoding MP4 dengan konfigurasi spesifik.
+         * Dilengkapi perlindungan terhadap bug `meta.decoderConfig` / `colorSpace` bernilai null
+         * pada beberapa driver hardware WebCodecs.
+         */
+        async function encodeWithConfig(videoConfig, totalFrames, frameDuration, pBar, pText, pStatus, allowHardwareFallback) {
+            const muxer = new Mp4Muxer.Muxer({
+                target: new Mp4Muxer.ArrayBufferTarget(),
+                video: {
+                    codec: 'avc',
+                    width: state.width,
+                    height: state.height
+                },
+                fastStart: 'in-memory'
+            });
+
+            let encoderError = null;
+            let receivedValidDecoderConfig = false;
+
+            const encoder = new VideoEncoder({
+                output: (chunk, meta) => {
+                    if (encoderError) return;
+                    try {
+                        // Normalisasi metadata agar meta.decoderConfig dan colorSpace tidak pernah null
+                        const safeMeta = meta ? { ...meta } : {};
+                        const defaultColorSpace = {
+                            primaries: 'bt709',
+                            transfer: 'bt709',
+                            matrix: 'bt709',
+                            fullRange: false
+                        };
+
+                        if (safeMeta.decoderConfig && typeof safeMeta.decoderConfig === 'object') {
+                            receivedValidDecoderConfig = true;
+                            safeMeta.decoderConfig = {
+                                ...safeMeta.decoderConfig,
+                                colorSpace: safeMeta.decoderConfig.colorSpace || defaultColorSpace
+                            };
+                        } else if (chunk.type === 'key' && !receivedValidDecoderConfig) {
+                            // Jika hardware encoder gagal menyertakan decoderConfig pada keyframe pertama,
+                            // picu fallback otomatis ke software encoder agar MP4 tetap valid & tidak crash
+                            if (allowHardwareFallback) {
+                                encoderError = new Error('FALLBACK_TO_SOFTWARE');
+                                return;
+                            }
+                            safeMeta.decoderConfig = {
+                                codec: videoConfig.codec,
+                                codedWidth: state.width,
+                                codedHeight: state.height,
+                                colorSpace: defaultColorSpace
+                            };
+                        }
+
+                        muxer.addVideoChunk(chunk, safeMeta);
+                    } catch (muxErr) {
+                        encoderError = muxErr;
+                    }
+                },
+                error: (e) => {
+                    encoderError = e;
+                }
+            });
+
+            encoder.configure(videoConfig);
+
+            const frameIntervalUs = Math.round(1_000_000 / state.fps);
+
+            try {
+                for (let i = 0; i < totalFrames; i++) {
+                    if (encoderError) throw encoderError;
+
+                    const currentTime = i * frameDuration;
+                    renderFrame(currentTime);
+
+                    const frame = new VideoFrame(canvas, {
+                        timestamp: i * frameIntervalUs,
+                        duration: frameIntervalUs
+                    });
+
+                    try {
+                        encoder.encode(frame, { keyFrame: i % state.fps === 0 });
+                    } catch (err) {
+                        frame.close();
+                        throw err;
+                    }
+                    frame.close();
+
+                    while (encoder.encodeQueueSize > 2) {
+                        if (encoderError) throw encoderError;
+                        await new Promise(r => requestAnimationFrame(r));
+                    }
+
+                    if (i % 5 === 0 || i === totalFrames - 1) {
+                        const percent = Math.round(((i + 1) / totalFrames) * 100);
+                        pBar.style.width = percent + '%';
+                        pText.innerText = 'Frame ' + (i + 1) + ' / ' + totalFrames + ' (' + percent + '%)';
+                        await new Promise(r => setTimeout(r, 0));
+                    }
+                }
+
+                if (encoderError) throw encoderError;
+                pStatus.innerText = 'Mengepak file MP4...';
+                await encoder.flush();
+                if (encoderError) throw encoderError;
+                muxer.finalize();
+                return muxer.target.buffer;
+            } finally {
+                try {
+                    if (encoder.state !== 'closed') encoder.close();
+                } catch (_) {}
+            }
+        }
+
+        // Proses Export Video MP4 dengan Auto-Fallback Hardware -> Software
         async function startExport() {
             if (state.isExporting || !state.userFunction) return;
-            if (typeof VideoEncoder === 'undefined' || typeof Mp4Muxer === 'undefined') { showMsg("Error", "Browser tidak mendukung WebCodecs", true); return; }
+            if (typeof VideoEncoder === 'undefined' || typeof Mp4Muxer === 'undefined') {
+                showMsg("Error", "Browser atau perangkat ini tidak mendukung WebCodecs MP4.", true);
+                return;
+            }
 
-            state.isExporting = true; state.isPlaying = false;
+            const exportBtn = document.getElementById('btn-export');
+            exportBtn.disabled = true;
+            state.isExporting = true;
+            state.isPlaying = false;
             cancelAnimationFrame(state.animationId);
 
             const overlay = document.getElementById('render-overlay');
@@ -412,80 +606,187 @@
             const pText = document.getElementById('progress-text');
             const pStatus = document.getElementById('render-info-status');
             
-            overlay.classList.remove('hidden'); pBar.style.width = '0%'; pText.innerText = 'Menyiapkan...';
+            overlay.classList.remove('hidden');
+            pBar.style.width = '0%';
+            pText.innerText = 'Menyiapkan...';
 
-            const totalFrames = Math.floor(state.duration * state.fps);
+            const totalFrames = Math.max(1, Math.round(state.duration * state.fps));
             const frameDuration = 1 / state.fps;
 
             try {
                 const baseTargetBitrate = state.bitrate * 1_000_000;
-                let videoConfig = null;
-                const codecs = ['avc1.640034', 'avc1.4d0034', 'avc1.420034', 'avc1.640028', 'avc1.4d0028', 'avc1.420028', 'avc1.42E01F', 'avc1.42001E'];
-                const accelerations = ['prefer-hardware', 'no-preference', 'prefer-software'];
-                const bitrateMultipliers = [1, 0.75, 0.5, 0.25]; 
+                const codecs = [
+                    'avc1.640028',
+                    'avc1.4d0028',
+                    'avc1.420028',
+                    'avc1.640034',
+                    'avc1.4d0034',
+                    'avc1.420034',
+                    'avc1.42E01F',
+                    'avc1.42001E'
+                ];
+                const accelerations = ['no-preference', 'prefer-hardware', 'prefer-software'];
+                const bitrateMultipliers = [1, 0.75, 0.5, 0.25];
                 
-                pStatus.innerText = "Mencari Konfigurasi Hardware...";
-                
-                findConfig: for (let hw of accelerations) {
-                    for (let codec of codecs) {
-                        for (let mult of bitrateMultipliers) {
-                            const testBitrate = Math.floor(baseTargetBitrate * mult);
-                            const testConfig = { codec: codec, width: state.width, height: state.height, bitrate: testBitrate, bitrateMode: 'constant', framerate: state.fps, hardwareAcceleration: hw };
-                            try { const support = await VideoEncoder.isConfigSupported(testConfig); if (support.supported) { videoConfig = testConfig; break findConfig; } } catch (e) {}
+                pStatus.innerText = "Mencari Konfigurasi Encoder...";
+
+                // Kumpulkan daftar kandidat konfigurasi yang didukung perangkat
+                const supportedConfigs = [];
+                for (const hw of accelerations) {
+                    for (const codec of codecs) {
+                        for (const mult of bitrateMultipliers) {
+                            const testBitrate = Math.max(500_000, Math.floor(baseTargetBitrate * mult));
+                            const testConfig = {
+                                codec: codec,
+                                width: state.width,
+                                height: state.height,
+                                bitrate: testBitrate,
+                                bitrateMode: 'constant',
+                                framerate: state.fps,
+                                hardwareAcceleration: hw,
+                                avc: { format: 'avc' }
+                            };
+                            try {
+                                const support = await VideoEncoder.isConfigSupported(testConfig);
+                                if (support.supported) {
+                                    supportedConfigs.push(testConfig);
+                                    break; // Lanjut ke codec/akselerasi berikutnya jika bitrate ini sudah didukung
+                                }
+                            } catch (e) {}
                         }
+                        if (supportedConfigs.some(c => c.hardwareAcceleration === hw)) break;
                     }
                 }
 
-                if (!videoConfig) throw new Error('Resolusi tidak didukung');
+                if (supportedConfigs.length === 0) {
+                    throw new Error('Resolusi atau codec H.264 tidak didukung oleh browser ini.');
+                }
 
-                let muxer = new Mp4Muxer.Muxer({ target: new Mp4Muxer.ArrayBufferTarget(), video: { codec: 'avc', width: state.width, height: state.height }, fastStart: 'in-memory' });
-                let encoderError = null;
-                let encoder = new VideoEncoder({ output: (chunk, meta) => muxer.addVideoChunk(chunk, meta), error: (e) => { encoderError = e; } });
+                let mp4Buffer = null;
+                let lastErr = null;
 
-                encoder.configure(videoConfig);
+                for (let idx = 0; idx < supportedConfigs.length; idx++) {
+                    const cfg = supportedConfigs[idx];
+                    const isLastResort = idx === supportedConfigs.length - 1;
+                    pBar.style.width = '0%';
+                    pStatus.innerText = `Merender (${cfg.hardwareAcceleration === 'prefer-software' ? 'Software' : 'Hardware'} • ${cfg.codec})...`;
 
-                for (let i = 0; i < totalFrames; i++) {
-                    if (encoderError) throw new Error(encoderError.message);
-                    const currentTime = i * frameDuration;
-                    renderFrame(currentTime);
-                    let frame = new VideoFrame(canvas, { timestamp: i * Math.floor(1000000 / state.fps) });
-                    try { encoder.encode(frame, { keyFrame: i % state.fps === 0 }); } catch (err) { frame.close(); throw err; }
-                    frame.close();
-                    while (encoder.encodeQueueSize > 1) { if (encoderError) break; await new Promise(r => requestAnimationFrame(r)); }
-                    if (i % 5 === 0 || i === totalFrames - 1) {
-                        const percent = Math.round(((i + 1) / totalFrames) * 100);
-                        pBar.style.width = percent + '%'; pText.innerText = 'Frame ' + (i + 1) + ' / ' + totalFrames + ' (' + percent + '%)';
-                        await new Promise(r => setTimeout(r, 0));
+                    try {
+                        mp4Buffer = await encodeWithConfig(
+                            cfg,
+                            totalFrames,
+                            frameDuration,
+                            pBar,
+                            pText,
+                            pStatus,
+                            !isLastResort
+                        );
+                        break;
+                    } catch (attemptErr) {
+                        lastErr = attemptErr;
+                        // Jika gagal karena hardware encoder bermasalah, lanjut otomatis ke kandidat berikutnya (software)
                     }
                 }
 
-                if (encoderError) throw new Error(encoderError.message);
-                pStatus.innerText = 'Mengepak file MP4...';
-                await encoder.flush(); muxer.finalize(); encoder.close();
+                if (!mp4Buffer) {
+                    throw lastErr || new Error('Gagal melakukan encoding video.');
+                }
 
-                let finalBlob = new Blob([muxer.target.buffer], { type: 'video/mp4' });
+                const finalBlob = new Blob([mp4Buffer], { type: 'video/mp4' });
                 const url = URL.createObjectURL(finalBlob);
-                const a = document.createElement('a'); a.style.display = 'none'; a.href = url;
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
                 a.download = 'Export_' + state.width + 'x' + state.height + '_' + state.fps + 'fps.mp4';
-                document.body.appendChild(a); a.click();
-                setTimeout(() => { document.body.removeChild(a); window.URL.revokeObjectURL(url); }, 200);
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                }, 250);
 
-            } catch (err) { showMsg("Gagal Merender Video", err.message, true); } 
-            finally { state.isExporting = false; overlay.classList.add('hidden'); state.time = 0; state.isPlaying = true; state.lastTimestamp = performance.now(); liveLoop(performance.now()); }
+            } catch (err) {
+                showMsg("Gagal Merender Video", err.message || "Terjadi kesalahan saat encoding MP4.", true);
+            } finally {
+                exportBtn.disabled = false;
+                state.isExporting = false;
+                overlay.classList.add('hidden');
+                state.time = 0;
+                state.isPlaying = true;
+                state.lastTimestamp = performance.now();
+                liveLoop(performance.now());
+            }
         }
 
-        document.getElementById('preset-select').addEventListener('change', (e) => { codeEditor.value = PRESETS[e.target.value]; compileCode(); });
-        document.getElementById('btn-format').addEventListener('click', () => { let code = codeEditor.value; code = code.replace(/;\s*/g, ';\n').replace(/{\s*/g, '{\n  ').replace(/}\s*/g, '\n}\n'); codeEditor.value = code; compileCode(); });
-        let typingTimer; codeEditor.addEventListener('input', () => { clearTimeout(typingTimer); typingTimer = setTimeout(compileCode, 400); });
-        document.getElementById('btn-play').addEventListener('click', () => { state.isPlaying = true; state.lastTimestamp = performance.now(); });
-        document.getElementById('btn-pause').addEventListener('click', () => { state.isPlaying = false; });
-        document.getElementById('btn-reset').addEventListener('click', () => { state.time = 0; renderFrame(0); });
-        document.getElementById('timeline-slider').addEventListener('input', (e) => { state.isPlaying = false; state.time = parseFloat(e.target.value); renderFrame(state.time); document.getElementById('time-display').innerText = state.time.toFixed(2) + 's'; });
+        // Formatter kode JavaScript yang aman (tidak merusak loop for atau komentar)
+        function formatJsCode(source) {
+            const lines = source.split('\n');
+            let indent = 0;
+            const formatted = lines.map(rawLine => {
+                const line = rawLine.trim();
+                if (!line) return '';
+                if (line.startsWith('}') || line.startsWith(']') || line.startsWith(')')) {
+                    indent = Math.max(0, indent - 1);
+                }
+                const result = '    '.repeat(indent) + line;
+                const openBraces = (line.match(/{/g) || []).length;
+                const closeBraces = (line.match(/}/g) || []).length;
+                const net = openBraces - closeBraces;
+                if (net > 0) indent += net;
+                else if (net < 0 && !(line.startsWith('}') || line.startsWith(']') || line.startsWith(')'))) {
+                    indent = Math.max(0, indent + net);
+                }
+                return result;
+            });
+            return formatted.join('\n');
+        }
+
+        document.getElementById('preset-select').addEventListener('change', (e) => {
+            codeEditor.value = PRESETS[e.target.value];
+            compileCode();
+        });
+        document.getElementById('btn-format').addEventListener('click', () => {
+            codeEditor.value = formatJsCode(codeEditor.value);
+            compileCode();
+        });
+
+        let typingTimer;
+        codeEditor.addEventListener('input', () => {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(compileCode, 400);
+        });
+
+        document.getElementById('btn-play').addEventListener('click', () => {
+            state.isPlaying = true;
+            state.lastTimestamp = performance.now();
+        });
+        document.getElementById('btn-pause').addEventListener('click', () => {
+            state.isPlaying = false;
+        });
+        document.getElementById('btn-reset').addEventListener('click', () => {
+            state.time = 0;
+            renderFrame(0);
+            document.getElementById('time-display').innerText = '0.00s';
+            document.getElementById('timeline-slider').value = 0;
+        });
+        document.getElementById('timeline-slider').addEventListener('input', (e) => {
+            state.isPlaying = false;
+            state.time = parseFloat(e.target.value);
+            renderFrame(state.time);
+            document.getElementById('time-display').innerText = state.time.toFixed(2) + 's';
+        });
         document.getElementById('btn-export').addEventListener('click', startExport);
 
-        codeEditor.value = PRESETS.hud; generatePrompt(); updateDimensions(); compileCode();
-        state.lastTimestamp = performance.now(); requestAnimationFrame(liveLoop);
-        if(window.innerWidth >= 768) { switchTab('pane-code'); }
+        // Inisialisasi Awal
+        codeEditor.value = PRESETS.hud;
+        generatePrompt();
+        updateDimensions();
+        compileCode();
+        state.lastTimestamp = performance.now();
+        requestAnimationFrame(liveLoop);
+        if (window.innerWidth >= 768) {
+            switchTab('pane-code');
+        }
     </script>
 </body>
 </html>
